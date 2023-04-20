@@ -1,0 +1,4 @@
+Im not sure how to run open html files on this google cloud server
+I would suggest to download these two files to your local and run trades.q in a q session
+Then open the HTML file in your browser
+Type in syms like GOOG or IBM to query the trade table

@@ -1,0 +1,96 @@
+Instructions Exercise 1:
+
+//////////////////////////////////////////////////   Q1-5
+
+-cd to /home/mhagan_kx_com/E1
+-run the 5 commands below in different terminal windows in the order shown below.
+-this will kickstart the tickerplant, two rdbs, complex event handler and the feedhandler.
+
+q tick.q sym /home/mhagan_kx_com/E1/tplog/ -p 5020                         
+q tick/r.q :5020 -p 5021
+q tick/r2.q :5020 -p 5022
+q tick/cep.q :5020 -p 5023
+q tick/fh.q :5020 -p 5024
+
+The logging script is loaded into each process upon startup. It can be found in E1/logging.q
+
+//////////////////////////////////////////////////// Q6
+
+-cd to /home/mhagan_kx_com/Scripts
+
+START:
+- run './start.sh ALL' from command line
+- this will start ALL of tp, rdb1, rdb2, fh and cep
+- to run just the TP use './start.sh TICK'
+- to run the rest of the processes use one of RDB1, RDB2, FH or CEP instead of 'TICK'
+- note that ports can be configured in the script
+
+STOP:
+-run ./stop.sh ALL
+. this will kill all processes running
+
+TEST:
+-run ./test
+-this will show which processes are running
+
+//////////////////////////////////////////////////// Q7
+
+-cd to /home/mhagan_kx_com/E1
+-run the below command. it will create a new log file called newSym2023.03.30 which will only contain trades for ibm.n as specified in the question. feel free to change the date to your current date.
+
+q logReplay.q -OldLog /home/mhagan_kx_com/E1/tplog/sym2023.03.30 -NewLog /home/mhagan_kx_com/E1/tplog/newSym2023.03.30
+
+-to test it open up a q session and type in the following:
+
+get `:/home/mhagan_kx_com/E1/tplog/newSym2023.03.30
+
+//////////////////////////////////////////////////// Q8
+
+-cd to /home/mhagan_kx_com/E1
+-run the below command to run the end of day savedown script
+
+q tick/eod.q -p 5025 -hdb /home/mhagan_kx_com/E1/hdb/ -logs /home/mhagan_kx_com/E1/tplog/ -date 2023.02.16
+
+-hdb here in the filepath where you want to save down the data.
+-it should contain a date folder for your specified date, this partitions it by date (feel free to use your current date here to try it).
+-it should also contain a sym file with a list of all the syms.
+-inside date folder should be the 3 tables.
+-inside the tables folders should be the column names and a .d file.
+
+//////////////////////////////////////////////////// Q9
+
+-run the below command to publish data from the trade csv file to the TP.
+
+q readCSV.q :5020 -p 5026 -tab trade -csv /home/mhagan_kx_com/E1/trade.csv
+
+-when you run you should get the below:
+
+mhagan_kx_com@advanced-kdb:~/E1$ q readCSV.q :5020 -p 5026 -tab trade -csv /home/mhagan_kx_com/E1/trade.csv
+KDB+ 4.0 2022.04.15 Copyright (C) 1993-2022 Kx Systems
+l64/ 2(2)core 7978MB mhagan_kx_com advanced-kdb 10.154.0.3 EXPIRE 2023.12.07 dcrossey@kx.com #76201
+
+"publishing 4 records to the TP"
+
+
+-to test they have been published properly you can head over the the rdb (r.q) and test it out for yourself.
+-below is a before and after of the trade table after the extra csv data has been inserted.
+
+q)trade
+time                 sym    price    size
+-----------------------------------------
+0D11:54:37.130320000 MSFT.O 45.15104 710 
+q)trade
+time                 sym    price    size
+-----------------------------------------
+0D11:54:37.130320000 MSFT.O 45.15104 710 
+0D09:09:46.472799000 IBM.M  228.45   280 
+0D09:09:46.472799000 IBM.M  228.45   280 
+0D09:09:46.472799000 IBM.M  228.45   280 
+0D09:09:46.472799000 IBM.M  228.45   280 
+
+
+//////////////////////////////////////////////////// Q10
+
+Adding columns to a schema in a real life scenario would usually be tested first in qa and then moved to prod at the weekend turnover. Changes would need to be made in qschema and probably the tables config file.
+In this dummy scenario, a lot of files would need changed like the sym files, fh, cep and partitions in the .d files in the hdb. A possible solution to reduce issues at eod savedown would be to use the addcol function to modify the schema of all previous save downs , for example  ---  addcol[`:/hdb;`trade;`SeqNum;0h]. 
+

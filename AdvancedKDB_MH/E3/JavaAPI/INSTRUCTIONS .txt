@@ -1,0 +1,8 @@
+Follow Instructions to use java api csv reader:
+-  make sure tp etc is up and running on port 5020 by running './start.sh ALL' in E1/Scripts folder
+- to run java API type 'java CsvApi' into terminal
+- should get 3 rows sent to the tp
+- again, like python script, check tplog to make sure the rows have been published
+- to do this, go to e1 folder, run q, type \l tplog, then get `:sym[date].
+-should see the 3 rows youve added to the trade table. 
+

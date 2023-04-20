@@ -1,0 +1,48 @@
+2.2
+
+/////////////////////////////////////////////////////////
+
+t1:
+
+-missing .d file.
+-fix by running `:t1/.d set `sym`price`size 
+
+/////////////////////////////////////////////////////////
+
+t2:
+
+- upon running the following:
+q)t2: get `:t2/
+q)count t2[`sym]
+25
+q)count t2[`price]
+24
+q)count t2[`size]
+25
+
+-noticed a desparity in column counts.
+-fix by running `:t2/price set 25#t2`price
+-now it is correct:
+
+q)count t2[`price]
+25
+
+/////////////////////////////////////////////////////////
+
+t3:
+
+-upon running:
+
+q)get `:t3/sym
+`A`C`C`A`A`A`A`C`C`B`B`C`C`B`B`A`C`A`C`B`C`B`A`C`B
+
+-i noticed the sym column was not enumerated like the rest of the tables like below:
+
+q))get `:t2/sym
+`sym$`A`C`A`C`C`A`C`C`A`C`A`A`A`C`A`C`C`C`C`A`C`C`C`C`A
+
+-fix by running `:t3/sym set `sym$t3`sym
+-produces the correctly enumerates sym col below: 
+
+q)get `:t3/sym
+`sym$`A`C`C`A`A`A`A`C`C`B`B`C`C`B`B`A`C`A`C`B`C`B`A`C`B

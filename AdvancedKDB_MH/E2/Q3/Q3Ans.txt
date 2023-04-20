@@ -1,0 +1,7 @@
+q3
+
+1. - we could make the HDB multi threaded. To do this you would  use slaves via the command line (-s).
+   - The user can then run queries by using peach eg - {select from quote where date = x} peach d.
+   - This will allow work to be run on multiple threads so calculations are performed faster.
+2. - apply attributes (Parted,Grouped,Unique,Sorted) to table columns where applicable.
+   - this way queries can be sped up significantly taking full advantage of the different attributes speed capabilities.

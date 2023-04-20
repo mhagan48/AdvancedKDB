@@ -1,0 +1,16 @@
+2.4
+
+-current time to execute:
+
+q)StringtoDate:{[x]{$[10h~abs type x;x:"D"$x;-14h~ type x;x:x;`date$x]}'[x]} 
+q)\ts StringtoDate raze 500000#enlist("2010.01.01";2010.01.02)
+390 28972128
+
+
+solution time:
+
+q)StringtoDate:{[x]{if[10h=type x;x:"D"$x];x}'[x]}
+q)\ts StringtoDate raze 500000#enlist("2010.01.01";2010.01.02)
+251 28972128
+
+-significant improvement

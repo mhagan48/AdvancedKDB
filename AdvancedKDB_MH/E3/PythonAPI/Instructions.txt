@@ -1,0 +1,8 @@
+to run this python script follow these steps:
+-make sure tp fh rdb's etc are running, the tp is hardcoded to 5020 on this instance
+-type 'conda activate pykx' in terminal to use pykx functionality
+-to run script type 'python3 readCsv.py'.
+-this will write 3 entries to the trade table
+-check the tplogs in q to verify they have successfully been written to the tp
+
+
